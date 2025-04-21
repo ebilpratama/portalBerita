@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div className="bg-gray-100 min-h-screen py-6 px-4">
       <div className="max-w-screen-xl mx-auto">
@@ -42,7 +44,8 @@ const Home: React.FC = () => {
             {/* Berita Terhangat */}
             <section>
               <h2 className="font-semibold text-xl mb-3">Berita Terhangat</h2>
-              <div className="bg-white h-36 flex items-center justify-center text-lg shadow-md rounded-lg">
+              <div className="bg-white h-36 flex items-center justify-center text-lg shadow-md rounded-lg cursor-pointer"
+                onClick={() => navigate("/news")}>
                 Judul Berita
               </div>
             </section>
@@ -51,7 +54,8 @@ const Home: React.FC = () => {
             <section>
               <div className="flex justify-between items-center mb-3">
                 <h2 className="font-semibold text-xl">Trending</h2>
-                <a href="#" className="text-sm text-blue-600 hover:underline">
+                <a href="#" className="text-sm text-blue-600 hover:underline"
+                onClick={() => navigate("/newslist")}>
                   Lainnya
                 </a>
               </div>
@@ -59,19 +63,20 @@ const Home: React.FC = () => {
                 {Array.from({ length: 6 }).map((_, idx) => (
                   <div
                     key={idx}
-                    className="bg-white h-20 flex items-center justify-center rounded shadow-md"
-                  >
+                    className="bg-white h-20 flex items-center justify-center rounded shadow-md cursor-pointer"
+                    onClick={() => navigate("/news")}>
                     Judul
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* Berita Untuk Mu */}
+            {/* Berita Untukmu */}
             <section>
               <div className="flex justify-between items-center mb-3">
                 <h2 className="font-semibold text-xl">Berita Untukmu</h2>
-                <a href="#" className="text-sm text-blue-600 hover:underline">
+                <a href="#" className="text-sm text-blue-600 hover:underline"
+                onClick={() => navigate("/newslist")}>
                   Lainnya
                 </a>
               </div>
@@ -79,8 +84,8 @@ const Home: React.FC = () => {
                 {Array.from({ length: 6 }).map((_, idx) => (
                   <div
                     key={idx}
-                    className="bg-white h-20 flex items-center justify-center rounded shadow-md"
-                  >
+                    className="bg-white h-20 flex items-center justify-center rounded shadow-md cursor-pointer"
+                    onClick={() => navigate("/news")}>
                     Judul
                   </div>
                 ))}

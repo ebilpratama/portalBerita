@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const News: React.FC = () => {
   return (
@@ -37,50 +38,59 @@ const News: React.FC = () => {
             </div>
           </aside>
 
-        {/* Main Content */}
-        <main className="w-4/5 pl-6 flex gap-6">
-          {/* Konten Berita */}
-          <div className="flex-1 space-y-6">
-            <div className="bg-white p-6 rounded shadow">
-              <h1 className="text-2xl font-bold text-center mb-4">JUDUL BERITA</h1>
-              <div className="flex gap-6 mb-4">
-                <div className="w-1/3 bg-gray-300 h-48 flex items-center justify-center">
+          {/* Main Content */}
+          <main className="w-4/5 pl-6 flex gap-6">
+            {/* Konten Berita */}
+            <div className="flex-1 space-y-6">
+              <div className="bg-white p-6 rounded shadow">
+                <h1 className="text-2xl font-bold text-center mb-6">JUDUL BERITA</h1>
+                <div className="w-full bg-gray-300 h-64 flex items-center justify-center mb-6">
                   Gambar
                 </div>
-                <div className="w-2/3 text-sm">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
+                <p className="text-sm leading-relaxed text-justify">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                  irure dolor in reprehenderit in voluptate velit esse cillum
+                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                  cupidatat non proident, sunt in culpa qui officia deserunt
+                  mollit anim id est laborum.
+                  <br /><br />
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Morbi tristique senectus et netus et malesuada fames ac turpis
+                  egestas. Aenean sed adipiscing diam donec adipiscing tristique
+                  risus nec. In ornare quam viverra orci sagittis eu volutpat
+                  odio facilisis. Quis commodo odio aenean sed adipiscing diam
+                  donec.
+                </p>
+              </div>
+
+              {/* Komentar */}
+              <div className="bg-white p-4 rounded shadow">
+                <h3 className="font-semibold mb-2">Comment</h3>
+                <div className="flex items-center gap-2 text-sm">
+                  <div className="w-6 h-6 rounded-full bg-gray-300"></div>
+                  <div>
+                    <strong>User</strong>
+                    <p>lorem ipsum</p>
+                  </div>
                 </div>
               </div>
-              <p className="text-sm">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
-              </p>
             </div>
 
-            {/* Komentar */}
-            <div className="bg-white p-4 rounded shadow">
-              <h3 className="font-semibold mb-2">Comment</h3>
-              <div className="flex items-center gap-2 text-sm">
-                <div className="w-6 h-6 rounded-full bg-gray-300"></div>
-                <div>
-                  <strong>User</strong>
-                  <p>lorem ipsum</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar Kanan */}
-          <aside className="w-1/4 space-y-4">
-            <h3 className="font-semibold">Berita Serupa</h3>
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="bg-white h-16 rounded shadow"></div>
-            ))}
-          </aside>
-        </main>
+            {/* Sidebar Kanan */}
+            <aside className="w-1/4 space-y-4">
+              <h3 className="font-semibold">Berita Serupa</h3>
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="bg-white h-16 rounded shadow"></div>
+              ))}
+            </aside>
+          </main>
+        </div>
       </div>
     </div>
-    </div>
-    
   );
 };
 
