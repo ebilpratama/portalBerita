@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap');
+/* @plugin "@iconify/tailwind4"; */
+
+/* Set the font as the default for the body */
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
