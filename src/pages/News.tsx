@@ -2,20 +2,23 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const News: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div className="bg-gray-100 min-h-screen py-6 px-4">
       <div className="max-w-screen-xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <div className="w-16 h-16 border-2 border-black flex items-center justify-center text-sm font-bold">
+          <button className="w-16 h-16 border-2 border-black flex items-center justify-center text-sm font-bold"
+            onClick={() => navigate("/")}>
             LOGO
-          </div>
+          </button>
           <input
             type="text"
             placeholder="Search"
             className="w-1/2 py-2 px-4 rounded-full border border-gray-300 shadow focus:outline-none"
           />
-          <button className="text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+          <button className="text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            onClick={() => navigate("/login")}>
             Login
           </button>
         </div>
@@ -25,13 +28,15 @@ const News: React.FC = () => {
           <aside className="w-1/4 space-y-8">
             <div>
               <h3 className="font-semibold text-lg mb-2">Kategori</h3>
-              <ul className="space-y-2 text-gray-700">
-                <li>Olahraga</li>
-                <li>Kesehatan</li>
-                <li>Politik</li>
-                <li>Pendidikan</li>
-                <li>Lainnya</li>
-              </ul>
+              <div className="space-y-2 text-gray-700">
+              {["Olahraga", "Kesehatan", "Politik", "Pendidikan", "Lainnya"].map((kategori) => (
+              <button
+              key={kategori}
+              className="w-full text-left px-4 py-2 hover:bg-gray-200 rounded transition"
+              onClick={() => console.log(`Navigasi ke kategori: ${kategori}`)}>
+              {kategori}
+              </button>
+              ))}
             </div>
             <div>
               <h3 className="font-semibold text-lg">Tersimpan</h3>

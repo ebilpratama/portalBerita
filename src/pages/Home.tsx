@@ -16,7 +16,8 @@ const Home: React.FC = () => {
             placeholder="Search"
             className="w-1/2 py-2 px-4 rounded-full border border-gray-300 shadow focus:outline-none"
           />
-          <button className="text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+          <button className="text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            onClick={() => navigate("/login")}>
             Login
           </button>
         </div>
@@ -24,15 +25,17 @@ const Home: React.FC = () => {
         <div className="flex gap-8">
           {/* Sidebar */}
           <aside className="w-1/4 space-y-8">
-            <div>
+            
               <h3 className="font-semibold text-lg mb-2">Kategori</h3>
-              <ul className="space-y-2 text-gray-700">
-                <li>Olahraga</li>
-                <li>Kesehatan</li>
-                <li>Politik</li>
-                <li>Pendidikan</li>
-                <li>Lainnya</li>
-              </ul>
+              <div className="space-y-2 text-gray-700">
+              {["Olahraga", "Kesehatan", "Politik", "Pendidikan", "Lainnya"].map((kategori) => (
+              <button
+              key={kategori}
+              className="w-full text-left px-4 py-2 hover:bg-gray-200 rounded transition"
+              onClick={() => console.log(`Navigasi ke kategori: ${kategori}`)}>
+              {kategori}
+              </button>
+              ))}
             </div>
             <div>
               <h3 className="font-semibold text-lg">Tersimpan</h3>
