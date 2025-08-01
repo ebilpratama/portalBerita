@@ -1,9 +1,12 @@
+// file: components/Signup.jsx atau path file Anda
 
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,34 +20,40 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 
+// 1. Tambahkan 'username' ke skema validasi
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+    message: "Nama harus memiliki minimal 2 karakter.",
+  }),
+  username: z.string().min(3, {
+    message: "Username harus memiliki minimal 3 karakter.",
   }),
   email: z.string().email({
-    message: "Please enter a valid email address.",
+    message: "Silakan masukkan alamat email yang valid.",
   }),
   password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+    message: "Password harus memiliki minimal 8 karakter.",
   }),
   confirmPassword: z.string(),
-  // Modified this field to correctly handle boolean values
   acceptTerms: z.boolean()
     .refine(val => val === true, {
-      message: "You must accept the terms and conditions",
+      message: "Anda harus menyetujui syarat dan ketentuan",
     }),
 }).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
+  message: "Password tidak cocok",
   path: ["confirmPassword"],
 });
 
 const Signup = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      username: "", // Tambahkan default value untuk username
       email: "",
       password: "",
       confirmPassword: "",
@@ -52,31 +61,44 @@ const Signup = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Here you would normally handle user registration with a backend
-    console.log(values);
-    
-    toast({
-      title: "Account created successfully!",
-      description: "This is a demo. Registration would happen here.",
-    });
+  // 2. Modifikasi fungsi onSubmit untuk mengirim data ke backend
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      // Mengirim data pendaftaran ke backend
+      await axios.post('http://localhost:5000/api/auth/register', {
+        name: values.name,
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      });
+
+      toast({
+        title: "Pendaftaran Berhasil!",
+        description: "Akun Anda telah dibuat. Silakan login.",
+      });
+      
+      // Arahkan pengguna ke halaman login setelah berhasil
+      navigate('/login');
+
+    } catch (error) {
+      // Menangani error dari backend (misal: username/email sudah ada)
+      const errorMessage = error.response?.data?.error || "Terjadi kesalahan saat pendaftaran.";
+      toast({
+        title: "Pendaftaran Gagal",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-100">
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <Link to="/" className="inline-block">
-              <div className="border border-gray-800 p-1 w-12 h-12 flex items-center justify-center mx-auto">
-                <span className="font-bold text-sm">LOGO</span>
-              </div>
-            </Link>
-            <h1 className="mt-6 text-3xl font-bold">Create an account</h1>
-            <p className="mt-2 text-gray-600">
-              Sign up to get started with our platform
-            </p>
-          </div>
+          <div className="text-center mb-8">{/* ... Logo dan Judul ... */}</div>
           
           <div className="bg-white p-8 rounded-lg shadow-sm">
             <Form {...form}>
@@ -86,12 +108,24 @@ const Signup = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel>Nama Lengkap</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="John Doe" 
-                          {...field} 
-                        />
+                        <Input placeholder="John Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                {/* 3. Tambahkan FormField untuk username */}
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
+                      <FormControl>
+                        <Input placeholder="pilih username unik" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -105,10 +139,7 @@ const Signup = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="yourname@example.com" 
-                          {...field} 
-                        />
+                        <Input placeholder="yourname@example.com" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -122,11 +153,7 @@ const Signup = () => {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="password" 
-                          placeholder="••••••••" 
-                          {...field} 
-                        />
+                        <Input type="password" placeholder="••••••••" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -138,13 +165,9 @@ const Signup = () => {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm Password</FormLabel>
+                      <FormLabel>Konfirmasi Password</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="password" 
-                          placeholder="••••••••" 
-                          {...field} 
-                        />
+                        <Input type="password" placeholder="••••••••" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -164,13 +187,13 @@ const Signup = () => {
                       </FormControl>
                       <div className="space-y-1 leading-none">
                         <FormLabel className="text-sm font-normal cursor-pointer">
-                          I agree to the{" "}
+                          Saya setuju dengan{" "}
                           <Link to="#" className="text-blue-600 hover:underline">
-                            Terms of Service
+                            Syarat Layanan
                           </Link>{" "}
-                          and{" "}
+                          dan{" "}
                           <Link to="#" className="text-blue-600 hover:underline">
-                            Privacy Policy
+                            Kebijakan Privasi
                           </Link>
                         </FormLabel>
                         <FormMessage />
@@ -179,17 +202,17 @@ const Signup = () => {
                   )}
                 />
 
-                <Button type="submit" className="w-full">
-                  Create account
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? 'Membuat akun...' : 'Buat akun'}
                 </Button>
               </form>
             </Form>
 
             <div className="mt-6 text-center text-sm">
               <p>
-                Already have an account?{" "}
+                Sudah punya akun?{" "}
                 <Link to="/login" className="text-blue-600 hover:underline font-medium">
-                  Sign in
+                  Masuk
                 </Link>
               </p>
             </div>

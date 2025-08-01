@@ -1,9 +1,12 @@
+// file: components/Login.jsx atau path file Anda
 
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,36 +20,58 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 
+// Skema validasi menggunakan username
 const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
+  username: z.string().min(3, {
+    message: "Username harus memiliki minimal 3 karakter.",
   }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+  password: z.string().min(6, {
+    message: "Password harus memiliki minimal 6 karakter.",
   }),
   rememberMe: z.boolean().default(false),
 });
 
 const Login = () => {
   const { toast } = useToast();
-  
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
       rememberMe: false,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Here you would normally handle authentication with a backend
-    console.log(values);
-    
-    toast({
-      title: "Login Attempt",
-      description: "This is a demo. Authentication would happen here.",
-    });
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      // Mengirim permintaan ke backend
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        username: values.username,
+        password: values.password,
+      });
+
+      // Menyimpan token dan navigasi
+      localStorage.setItem('token', response.data.token);
+      toast({
+        title: "Login Berhasil!",
+        description: "Anda akan diarahkan ke halaman utama.",
+      });
+      navigate('/'); // Arahkan ke halaman utama atau dashboard
+
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || "Terjadi kesalahan saat login.";
+      toast({
+        title: "Login Gagal",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -55,9 +80,12 @@ const Login = () => {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <Link to="/" className="inline-block">
-              <div className="border border-gray-800 p-1 w-12 h-12 flex items-center justify-center mx-auto">
-                <span className="font-bold text-sm">LOGO</span>
-              </div>
+              
+              <img 
+                src="../logo.png" 
+                alt="Logo" 
+                className="h-8 w-auto"
+              />
             </Link>
             <h1 className="mt-6 text-3xl font-bold">Welcome back</h1>
             <p className="mt-2 text-gray-600">
@@ -68,17 +96,15 @@ const Login = () => {
           <div className="bg-white p-8 rounded-lg shadow-sm">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Username</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="yourname@example.com" 
-                          {...field} 
-                        />
+                        <Input placeholder="masukkan username anda" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -92,11 +118,7 @@ const Login = () => {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="password" 
-                          placeholder="••••••••" 
-                          {...field} 
-                        />
+                        <Input type="password" placeholder="••••••••" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -121,13 +143,13 @@ const Login = () => {
                       </FormItem>
                     )}
                   />
-                  <Link to="#" className="text-sm text-blue-600 hover:underline">
+                  {/* <Link to="#" className="text-sm text-blue-600 hover:underline">
                     Forgot password?
-                  </Link>
+                  </Link> */}
                 </div>
 
-                <Button type="submit" className="w-full">
-                  Sign in
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? 'Signing in...' : 'Sign in'}
                 </Button>
               </form>
             </Form>

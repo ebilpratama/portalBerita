@@ -36,12 +36,12 @@ const categories = [
 
 // Form validation schema
 const formSchema = z.object({
-  title: z.string().min(10, "Title must be at least 10 characters").max(100, "Title must not exceed 100 characters"),
-  excerpt: z.string().min(20, "Excerpt must be at least 20 characters").max(250, "Excerpt must not exceed 250 characters"),
-  content: z.string().min(100, "Content must be at least 100 characters"),
-  category: z.string().min(1, "Please select a category"),
-  imageUrl: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
-  author: z.string().min(3, "Author name must be at least 3 characters"),
+  title: z.string().min(10, "Judul harus minimal 10 karakter").max(100, "Judul tidak boleh lebih dari 100 karakter"),
+  excerpt: z.string().min(20, "Ringkasan harus minimal 20 karakter").max(250, "Ringkasan tidak boleh lebih dari 250 karakter"),
+  content: z.string().min(100, "Konten harus minimal 100 karakter"),
+  category: z.string().min(1, "Silakan pilih kategori"),
+  imageUrl: z.string().url("Silakan masukkan URL yang valid").optional().or(z.literal("")),
+  author: z.string().min(3, "Nama penulis harus minimal 3 karakter"),
 });
 
 type NewsFormValues = z.infer<typeof formSchema>;
@@ -76,9 +76,9 @@ const NewsForm = ({ onSubmit, isSubmitting }: NewsFormProps) => {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Judul</FormLabel>
               <FormControl>
-                <Input placeholder="Enter news title" {...field} />
+                <Input placeholder="Masukkan judul berita" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -90,17 +90,17 @@ const NewsForm = ({ onSubmit, isSubmitting }: NewsFormProps) => {
           name="excerpt"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Excerpt</FormLabel>
+              <FormLabel>Ringkasan</FormLabel>
               <FormControl>
                 <Textarea 
-                  placeholder="A brief summary of your news" 
+                  placeholder="Ringkasan singkat dari berita Anda" 
                   {...field} 
                   className="resize-none"
                   rows={2}
                 />
               </FormControl>
               <FormDescription>
-                This will appear as a preview on the news listings
+                Ini akan muncul sebagai pratinjau di daftar berita
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -112,10 +112,10 @@ const NewsForm = ({ onSubmit, isSubmitting }: NewsFormProps) => {
           name="content"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Content</FormLabel>
+              <FormLabel>Konten</FormLabel>
               <FormControl>
                 <Textarea 
-                  placeholder="Write your full news article here" 
+                  placeholder="Tulis artikel berita lengkap Anda di sini"
                   {...field} 
                   className="min-h-[200px] resize-none"
                   rows={8}
@@ -132,14 +132,14 @@ const NewsForm = ({ onSubmit, isSubmitting }: NewsFormProps) => {
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category</FormLabel>
+                <FormLabel>Kategori</FormLabel>
                 <Select 
                   onValueChange={field.onChange} 
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
+                      <SelectValue placeholder="Pilih kategori" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -160,9 +160,9 @@ const NewsForm = ({ onSubmit, isSubmitting }: NewsFormProps) => {
             name="author"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Author</FormLabel>
+                <FormLabel>Penulis</FormLabel>
                 <FormControl>
-                  <Input placeholder="Your name" {...field} />
+                  <Input placeholder="Nama Anda" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -175,12 +175,12 @@ const NewsForm = ({ onSubmit, isSubmitting }: NewsFormProps) => {
           name="imageUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Featured Image URL (Optional)</FormLabel>
+              <FormLabel>URL Gambar Utama (Opsional)</FormLabel>
               <FormControl>
                 <Input placeholder="https://example.com/image.jpg" {...field} />
               </FormControl>
               <FormDescription>
-                Add a URL to an image that represents your news article
+                Tambahkan URL gambar yang mewakili artikel berita Anda
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -188,7 +188,7 @@ const NewsForm = ({ onSubmit, isSubmitting }: NewsFormProps) => {
         />
 
         <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Submit News"}
+          {isSubmitting ? "Mengirim..." : "Kirim Berita"}
         </Button>
       </form>
     </Form>

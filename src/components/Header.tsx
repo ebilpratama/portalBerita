@@ -1,4 +1,3 @@
-
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,9 +20,11 @@ const Header = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex-shrink-0">
           <Link to="/" className="flex items-center">
-            <div className="border border-gray-800 p-1 w-12 h-12 flex items-center justify-center">
-              <span className="font-bold text-sm">LOGO</span>
-            </div>
+            <img 
+              src="../logo.png" 
+              alt="Logo" 
+              className="h-8 w-auto"
+            />
           </Link>
         </div>
 

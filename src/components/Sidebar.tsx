@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Bookmark } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 // Category data
@@ -9,6 +8,9 @@ const categories = [
   { id: "kesehatan", name: "Kesehatan" },
   { id: "politik", name: "Politik" },
   { id: "pendidikan", name: "Pendidikan" },
+  { id: "ekonomi", name: "Ekonomi" },
+  { id: "teknologi", name: "Teknologi" },
+  { id: "budaya", name: "Budaya" },
   { id: "lainnya", name: "Lainnya" },
 ];
 
@@ -49,11 +51,15 @@ const Sidebar = () => {
       
       <div className="pt-4 border-t border-gray-100">
         <a
-          href="#saved"
+          href="#"
           className="flex items-center px-3 py-2 text-gray-700 rounded-md hover:bg-news-hover transition-colors"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate("/add");
+          }}
         >
-          <Bookmark size={18} className="mr-2" />
-          <span>Tersimpan</span>
+          <PlusCircle size={18} className="mr-2" />
+          <span>Kirim Berita</span>
         </a>
       </div>
     </aside>
